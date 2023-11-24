@@ -1,0 +1,17 @@
+{
+  "github": {
+    "release": true
+  },
+  "docker": {
+    "name": "docker.pkg.github.com/styvelioumba/tw-map",
+    "publish": true
+  },
+  "git": {
+    "requireBranch": "dev",
+    "commitMessage": "chore: release ${version}"
+  },
+  "hooks": {
+    "before:init": ["git pull origin dev"],
+    "after:bump": ["npx auto-changelog -p","npm run build"]
+  }
+}

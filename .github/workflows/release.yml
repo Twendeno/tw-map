@@ -1,0 +1,15 @@
+name: " Release " # OBLIGATOIRE : le nom de mon workflow
+on: # OBLIGATOIRE : les evenements qui declenche le workflow
+  push:
+    branches:
+      - dev
+jobs: # OBLIGATOIRE : les taches a effectuer
+  release: # le nom de ma premiere tache
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source code # le nom de ma premiere action : recupere le code source
+        uses: actions/checkout@v2
+      - name: Install the dependencies
+        run: npm ci
+      - name: End message
+        run: echo "The workflow is now finished"
