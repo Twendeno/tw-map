@@ -16,31 +16,38 @@
             "outputPath": "dist/twendeno-map",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "allowedCommonJsDependencies": ["leaflet"],
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "assets/"
+              }
             ],
             "styles": [
+              "./node_modules/leaflet/dist/leaflet.css",
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "./node_modules/leaflet/dist/leaflet.js"
+            ],
             "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "prerender": false,
+            "ssr": false
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -96,5 +103,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "a098ca83-483c-47d4-97c6-ab35a34d16b1"
   }
 }
