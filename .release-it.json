@@ -12,6 +12,7 @@
   },
   "hooks": {
     "before:init": ["git pull origin dev"],
-    "after:bump": ["npx auto-changelog -p","npm run build"]
+    "after:bump": ["npx auto-changelog -p","npm run build"],
+    "after:git:release": ["git push origin dev","echo Successfully released ${name} v${version} to ${repo.repository}."]
   }
 }
