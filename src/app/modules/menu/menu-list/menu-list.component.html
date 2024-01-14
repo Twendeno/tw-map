@@ -1,0 +1,37 @@
+<section class="mx-4 my-4 bg-white rounded-lg shadow-lg">
+
+  <app-item-menu-card *ngFor="let item of menuList">
+    <img src="{{item.icon}}" alt="{{item.title}}" header class="text-blue-900">
+    <div main>
+      <h3 class="text-gray-600 text-lg font-semibold font-mono">{{item.title}}</h3>
+      <p class="text-base font-light tracking-wide"> {{item.description}}</p>
+    </div>
+    <div footer>
+      <a routerLink="{{item.route}}"  routerLinkActive><img src="/assets/icons/chevron_droit.svg" alt="demarrer"></a>
+    </div>
+  </app-item-menu-card>
+
+  <article class="flex flex-row justify-around pb-4">
+    <a *ngFor="let sousItem of sousMenuList" routerLink="{{sousItem.route}}">
+      <div class="flex flex-col space-y-1  justify-center items-center">
+        <img src="{{sousItem.icon}}" class="w-10" alt="{{sousItem.title}}">
+        <h3 class="text-gray-600 text-sm font-semibold font-mono"> {{sousItem.title}} </h3>
+      </div>
+    </a>
+  </article>
+
+</section>
+
+<section class="mx-4 my-4 bg-white rounded-lg shadow-lg">
+
+  <a routerLink="/plans" routerLinkActive class="">
+    <div class="flex flex-row items-center justify-between space-x-3 px-2 py-4">
+      <img src="/assets/icons/pdf.svg" alt="idee" class="text-blue-900">
+      <div>
+        <h3 class="text-gray-600 text-lg font-semibold font-mono">Consulter les plans PDF.</h3>
+      </div>
+      <img src="/assets/icons/chevron_droit.svg" alt="demarrer">
+    </div>
+  </a>
+
+</section>

@@ -1,0 +1,14 @@
+<article class="flex flex-row items-center space-x-3 px-2 justify-between rounded-lg">
+  <header>
+    <ng-content select="[header]"/>
+  </header>
+
+  <main class="flex-1">
+    <ng-content select="[main]"/>
+  </main>
+
+  <footer>
+    <ng-content select="[footer]"/>
+  </footer>
+</article>
+<div class="border-b border-gray-300 my-4"></div>
