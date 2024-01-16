@@ -1,0 +1,25 @@
+{
+  "navbar": {
+    "choose_language": "Langues",
+    "title": "Plan dynamique"
+  },
+  "menuList": {
+    "cardItem": {
+      "title": {
+        "one": "Itineraire",
+        "two": "Horaires des lignes",
+        "three": "Recherche"
+      },
+      "description": {
+        "one": "Je calcule mon itineraire en transport en commun.",
+        "two": "Je consulte les horaires de passage.",
+        "three": "Je recherche un arrêt, une ligne, un lieu d'intérêt ou une commune."
+      }
+    },
+    "title": {
+      "one": "Points de vente",
+      "two": "Nos agences"
+    },
+    "download_map": "Consulter le plan en PDF."
+  }
+}
