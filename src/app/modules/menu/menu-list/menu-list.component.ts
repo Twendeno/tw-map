@@ -5,6 +5,7 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {TranslateService} from "@ngx-translate/core";
 import {LanguageService} from "@app/services/language.service";
 import {TranslationModule} from "@app/modules/translation/translation.module";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -14,36 +15,51 @@ import {TranslationModule} from "@app/modules/translation/translation.module";
   templateUrl: './menu-list.component.html',
   styleUrl: './menu-list.component.css'
 })
-export class MenuListComponent implements OnInit , OnDestroy{
+export class MenuListComponent implements OnInit, OnDestroy {
 
   menuList = [
-    {icon: 'assets/icons/itineraire.svg', title: 'menuList.cardItem.title.one', description: 'menuList.cardItem.description.one', route: '/itineraires'},
-    {icon: 'assets/icons/time.svg', title: 'menuList.cardItem.title.two', description: 'menuList.cardItem.description.two', route: '/lines'},
-    {icon: 'assets/icons/search.svg', title: 'menuList.cardItem.title.three', description: "menuList.cardItem.description.three", route: '/recherche'},
+    {
+      icon: 'assets/icons/itineraire.svg',
+      title: 'menuList.cardItem.title.one',
+      description: 'menuList.cardItem.description.one',
+      route: '/itineraires'
+    },
+    {
+      icon: 'assets/icons/time.svg',
+      title: 'menuList.cardItem.title.two',
+      description: 'menuList.cardItem.description.two',
+      route: '/lines'
+    },
+    {
+      icon: 'assets/icons/search.svg',
+      title: 'menuList.cardItem.title.three',
+      description: "menuList.cardItem.description.three",
+      route: '/recherche'
+    },
   ];
 
   sousMenuList = [
-    {icon:'assets/icons/ticket.svg',title:'menuList.title.one',route:'/points-de-vente'},
-    {icon:'assets/icons/agences.svg',title:'menuList.title.two',route:'/agences'},
+    {icon: 'assets/icons/ticket.svg', title: 'menuList.title.one', route: '/points-de-vente'},
+    {icon: 'assets/icons/agences.svg', title: 'menuList.title.two', route: '/agences'},
   ];
 
 
   readonly languageService$ = inject(LanguageService)
-  private readonly translate$= inject(TranslateService);
+  private readonly translate$ = inject(TranslateService);
+  private subscription = new Subscription();
 
   ngOnInit(): void {
-    this.languageService$.getLanguage().subscribe({
-      next:(newLanguage: string)=>{
-        this.translate$.use(newLanguage); // Langue initiale
-      },
-      complete:()=>{
-        this.languageService$.getLanguage().unsubscribe()
-      }
-    })
+    this.subscription.add(
+      this.languageService$.getLanguage().subscribe({
+        next: (newLanguage: string) => {
+          this.translate$.use(newLanguage); // Langue initiale
+        }
+      })
+    )
   }
 
   ngOnDestroy(): void {
-    this.languageService$.getLanguage().unsubscribe()
+    this.subscription.unsubscribe()
   }
-  
+
 }
