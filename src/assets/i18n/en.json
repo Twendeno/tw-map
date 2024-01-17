@@ -1,0 +1,26 @@
+{
+  "navbar": {
+    "choose_language": "Languages",
+    "title": "Dynamic plan"
+  },
+  "menuList": {
+    "cardItem": {
+      "title": {
+        "one": "Itinerary",
+        "two": "Timetables",
+        "three": "Search for"
+      },
+      "description": {
+        "one": "I can calculate my public transport route.",
+        "two": "I check the timetables.",
+        "three": "I'm looking for a stop, a line, a place of interest or a town."
+      }
+    },
+    "title": {
+      "one": "Points of sale",
+      "two": "Our offices"
+    },
+    "download_map": "View the PDF map."
+
+  }
+}
