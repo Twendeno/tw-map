@@ -6,6 +6,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {LanguageService} from "@app/services/language.service";
 import {TranslationModule} from "@app/modules/translation/translation.module";
 
+
 @Component({
   selector: 'app-menu-list',
   standalone: true,
@@ -44,8 +45,5 @@ export class MenuListComponent implements OnInit , OnDestroy{
   ngOnDestroy(): void {
     this.languageService$.getLanguage().unsubscribe()
   }
-
-
-
-
+  
 }
