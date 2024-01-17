@@ -1,0 +1,41 @@
+<div class="flex justify-center w-full h-screen mx-auto">
+  <div
+    id="map"
+    leaflet
+    [leafletOptions]="mapService.options"
+    [(leafletZoom)]="mapService.zoom"
+    [leafletCenter]="mapService.center"
+    [leafletLayers]="mapService.layers"
+    [leafletLayer]="mapService.currentLayer"
+    [leafletMarkerCluster]="clusterMapService.markerClusterData"
+    [leafletMarkerClusterOptions]="clusterMapService.markerClusterOptions"
+    (leafletMarkerClusterReady)="clusterMapService.markerClusterReady($event)"
+    (leafletMapReady)="mapService.onMapReady($event)">
+    <div class="controls-left ">
+      <router-outlet/>
+    </div>
+    <div class="controls-right space-y-2 items-center">
+      <div
+        id="zoom-in"
+        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
+        (click)="mapService.zoomIn()"
+        [class.disabled]="mapService.zoom >= mapService.zoomMax">
+        <span class="pi pi-plus"></span>
+      </div>
+      <div
+        id="zoom-out"
+        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
+        (click)="mapService.zoomOut()"
+        [class.disabled]="mapService.zoom <= mapService.zoomMin">
+        <span class="pi pi-minus"></span>
+      </div>
+      <div
+        id="layers"
+        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
+        (click)="mapService.nextLayer()">
+        <img alt="layer" src="../../../assets/icons/layers.svg" width="16">
+      </div>
+    </div>
+  </div>
+</div>
+

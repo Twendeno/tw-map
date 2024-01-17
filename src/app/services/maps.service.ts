@@ -1,19 +1,28 @@
-import {Injectable, signal} from '@angular/core';
-import {Map, marker, tileLayer, control, point, icon} from 'leaflet';
+import {inject, Injectable, signal} from '@angular/core';
 import {Geopoint} from "@app/models/geopoint";
+import 'leaflet';
+import 'leaflet.markercluster';
+import * as Leaflet from 'leaflet';
 
-
-import datas1Json from '@assets/datas1.json';
-import datas2Json from '@assets/datas2.json';
-import datas3Json from '@assets/datapn.json';
+import line1 from '@assets/datas/datapn.json';
+import cgGeo from '@assets/datas/geo-cg.json';
+import {ClusterMapService} from "@app/services/cluster-map.service";
+import {LayerMaps} from "@app/models/layer-maps";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MapsService {
 
-  private map!: Map;
-  private markers = [];
+  map!: Leaflet.Map;
+  zoom:number = 14.5;
+  zoomMax:number = 20;
+  zoomMin:number = 1;
+
+  readonly clusterMapService: ClusterMapService = inject(ClusterMapService);
+
+  center = Leaflet.latLng(-4.798426305004817, 11.846419529932914);//PN
+
   private myCurrentPosition= signal<Geopoint>({
     name: "My current position",
     longitude: 0,
@@ -21,44 +30,31 @@ export class MapsService {
     latLong: [0, 0]
   } as Geopoint);
 
-  // Wikimedia
-  mainLayer = tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
-    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
-    minZoom: 1,
-    detectRetina: true,
-    maxZoom: 19
-  });
+  currentLayer = LayerMaps.streetMaps
+  layers: Leaflet.Layer[] = [
+    this.currentLayer
+  ];
 
-  // Openstreetmap Layer
-  streetMaps = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">openstreetmap</a>',
-    detectRetina: true,
-  });
+  options = {
+    zoomControl: false,
+    minZoom: this.zoomMin,
+    maxZoom: this.zoomMax
+  };
 
 
-  // Openstreetmap Hot
-  openstreetmapHot = tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">openstreetmap</a>',
-    detectRetina: true,
+  myIcon = Leaflet.icon({
+    iconSize: [25, 41],
+    iconAnchor: [13, 41],
+    iconUrl: 'assets/marker-icon.png',
+    iconRetinaUrl: 'assets/marker-icon-2x.png',
+    shadowUrl: 'assets/marker-shadow.png'
   })
 
-  // Openstreetmap Osm
-  openstreetmapOsm = tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">openstreetmap</a>',
-    detectRetina: true,
-  })
+  constructor() {}
 
-  constructor() {
-
-  }
-
-  get getMyCurrentPosition(): Geopoint {
-    return this.myCurrentPosition();
-  }
-  onMapReady(map: Map) {
+  onMapReady(map: Leaflet.Map) {
     this.map= map;
-
-    map.locate({setView: true, maxZoom: 16});
+    map.setZoom(this.zoom);
 
     // Recuparation de la position de l'utilisateur
     map.on('locationfound', (e: any) => {
@@ -70,53 +66,102 @@ export class MapsService {
         latLong: [e.latitude, e.longitude]
       });
 
-      marker(this.myCurrentPosition().latLong , {
-        icon: icon({
-          iconSize: [25, 41],
-          iconAnchor: [13, 41],
-          iconUrl: 'assets/marker-icon.png',
-          iconRetinaUrl: 'assets/marker-icon-2x.png',
-          shadowUrl: 'assets/marker-shadow.png'
-        })
-      }).addTo(map)
     });
 
-    map.on('locationerror', (e: any) => {
-      console.log(e);
-    });
+    this.clusterMapService.addMarkerCluster(line1.geometry.coordinates, this.myIcon)
 
-    // this.destination.getRoute.map((data, index) => {
-    //   marker(data).addTo(map);
-    // });
+    this.addGeoJSONLayer(cgGeo);
 
   }
 
-  get datas1(): [number, number][] {
-    return datas1Json as [number,number][];
-  }
-  get datas2(): [number, number][] {
-    return datas2Json as [number,number][];
-  }
-
-  get datas3(): [number, number][] {
-    return datas3Json as [number,number][];
-  }
-
-  get datas(): [number, number][][] {
-    return [...[],datas1Json as [number,number][], datas2Json as [number,number][]]
-    ;
-  }
-
-  set setMap(map: Map) {
-    this.map = map;
+  addGeoJSONLayer(geojsonData: any) {
+    Leaflet.geoJSON(geojsonData, {
+      style: (feature) => ({
+        weight: 2,
+        opacity: 1,
+        color: '#C43302',
+        fillOpacity: 0.8,
+        fillColor: '#026E81',
+        dashArray: '2, 5'
+      }),
+      onEachFeature: (feature, layer) => {
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(feature.properties.name);
+        }
+      }
+    }).addTo(this.map);
   }
 
-  get getMap(): Map {
-    return this.map;
+
+  zoomIn(): void {
+    this.zoom = this.zoom >= this.zoomMax ? this.zoomMax : this.zoom + 0.5;
+  }
+
+  zoomOut(): void {
+    this.zoom = this.zoom <= this.zoomMin ? this.zoomMin : this.zoom - 0.5;
+  }
+
+  nextLayer(): void {
+    switch (this.currentLayer) {
+      case LayerMaps.mainLayer: {
+        this.currentLayer = LayerMaps.mainLayer;
+        break;
+      }
+      case LayerMaps.streetMaps: {
+        this.currentLayer = LayerMaps.streetMaps;
+        break;
+      }
+      case LayerMaps.openstreetmapHot: {
+        this.currentLayer = LayerMaps.openstreetmapHot;
+        break;
+      }
+      case LayerMaps.openstreetmapOsm: {
+        this.currentLayer = LayerMaps.openstreetmapOsm;
+        break;
+      }
+      case LayerMaps.layer_ArcGISGray: {
+        this.currentLayer = LayerMaps.layer_ArcGISGray;
+        break;
+      }
+      case LayerMaps.layer_OpenStreetMap: {
+        this.currentLayer = LayerMaps.layer_OpenStreetMap;
+        break;
+      }
+      case LayerMaps.layer_ArcGISStreets: {
+        this.currentLayer = LayerMaps.layer_ArcGISStreets;
+        break;
+      }
+      case LayerMaps.layer_ArcGISSatellite: {
+        this.currentLayer = LayerMaps.layer_ArcGISSatellite;
+        break;
+      }
+    }
+    this._updateLayers();
+  }
+
+  _updateLayers() {
+    this.layers = [this.currentLayer];
+  }
+
+
+  /**
+   * Afficher la position de l'utilisateur sur la carte
+   * centre la carte sur la position de l'utilisateur
+   */
+  showMyCurrentPosition() : void {
+    this.center = Leaflet.latLng(this.myCurrentPosition().latitude, this.myCurrentPosition().longitude);
+
+    this.map.locate({setView: true, maxZoom: this.zoomMax});
+
+    const markerText: string = `<br><span>Name: <span class="text-blue-900">Vous etes ici </b></span></span>`;
+
+    Leaflet.marker(this.myCurrentPosition().latLong,{icon:this.myIcon})
+      .addTo(this.map)
+      .bindPopup(markerText)
   }
 
   generateMarker(data: any, index: number) {
-    return marker(data.position, {draggable: data.draggable})
+    return Leaflet.marker(data.position, {draggable: data.draggable})
       .on('click', (event) => this.markerClicked(event, index))
       .on('dragend', (event) => this.markerDragEnd(event, index));
   }

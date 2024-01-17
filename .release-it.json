@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "github": {
     "release": true
   },
@@ -14,5 +15,17 @@
     "before:init": ["git pull origin dev"],
     "after:bump": ["npx auto-changelog -p","npm run build"],
     "after:git:release": ["git push --set-upstream origin dev","echo Successfully released ${name} v${version} to ${repo.repository}."]
+=======
+  "git": {
+    "requireBranch": "dev",
+    "commitMessage": "chore: release v${version}"
+  },
+  "hooks": {
+    "before:init": ["git pull origin dev"],
+    "after:bump": "npx auto-changelog -p"
+  },
+  "github": {
+    "release": true
+>>>>>>> 8b5813c0733eb726d833ee71b07d2550243542c8
   }
 }
