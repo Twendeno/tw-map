@@ -3,7 +3,8 @@
 }
 
 .controls-left {
-  width: 440px; /* Ajustez la largeur selon vos besoins */
+  max-width: 512px; /* Ajustez la largeur selon vos besoins */ /* max-w-lg 32rem */
+  width: 100%;
   background-color: rgba(241, 241, 241, 0.95); /* Ajoutez une couleur de fond si nécessaire */
   position: fixed;
   top: 112px; /* Hauteur de l'en-tête, ajustez selon votre en-tête */

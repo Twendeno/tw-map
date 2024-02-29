@@ -1,0 +1,9 @@
+<div class="flex flex-col justify-center">
+  <a class=" text-center cursor-pointer rounded-xl border border-blue-gray-50 bg-white py-4 px-4"
+     [ngStyle]="{'background-color':data.color}" (click)="onLineClicked(data)">
+            <span
+              class="text-center text-xl font-extrabold font-mono text-white">{{ data.name.toLowerCase().replace("line", " ").trim().toUpperCase().toString() }}</span>
+  </a>
+</div>
+
+

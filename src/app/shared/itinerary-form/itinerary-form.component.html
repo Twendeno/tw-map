@@ -1,0 +1,47 @@
+<form [formGroup]="itineraryForm" (ngSubmit)="onSubmit()" class="flex flex-col flex-grow">
+
+  @if ((station$|async)?.data;as stationData) {
+    <div class="flex w-full items-center space-x-1 rounded-t-lg border shadow-sm py-2 px-2">
+      <label for="departure" class="block text-sm font-medium leading-6 text-gray-900">De:</label>
+      @defer (when departure!.value!.length > 0){
+        <i class="pi pi-times-circle cursor-pointer text-red-800 border-gray-300" (click)="itineraryForm.patchValue({'departure':''})"></i>
+      }
+      <select id="departure" name="departure" formControlName="departure"
+              class="flex w-full items-center px-2 justify-center text-xs font-semibold leading-tight">
+
+        @for (stationItem  of stationData;track stationItem) {
+          <option value="{{ stationItem.latLng }}"> {{ stationItem.name }}
+          </option>
+        } @empty {
+          <option value="null">station not found</option>
+        }
+
+      </select>
+    </div>
+
+    <div class="flex items-center space-x-1 rounded-b-lg border shadow-sm py-2 px-2">
+      <label for="arrival" class="block text-sm font-medium leading-6 text-gray-900 ">À:</label>
+      @defer (when arrival!.value!.length > 0){
+        <i class="pi pi-times-circle cursor-pointer text-red-800 border-gray-300" (click)="itineraryForm.patchValue({'arrival':''})"></i>
+      }
+      <select id="arrival" name="arrival" formControlName="arrival"
+              class="flex w-full items-center px-2 justify-center text-xs font-semibold leading-tight">
+
+        @for (stationItem  of stationData;track stationItem) {
+          <option value="{{ stationItem.latLng }}"> {{ stationItem.name }}
+          </option>
+        } @empty {
+          <option value="null">station not found</option>
+        }
+
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="!itineraryForm.valid"
+            class="group relative w-full my-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-lightblue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-50"
+            aria-required="true"> Rechercher
+    </button>
+
+  }
+
+</form>

@@ -1,37 +1,58 @@
-<section class="mx-4 my-4 bg-white rounded-lg shadow-lg cursor-auto pointer-events-auto">
-
-  <app-item-menu-card *ngFor="let item of menuList">
-    <img src="{{item.icon}}" alt="{{ item.title | translate }}" header class="text-blue-900">
-    <div main>
-      <h3 class="text-gray-600 text-lg font-semibold font-mono">{{ item.title | translate }}</h3>
-      <p class="text-base font-light tracking-wide"> {{ item.description | translate }}</p>
-    </div>
-    <div footer>
-      <a routerLink="{{item.route}}"  routerLinkActive><img src="/assets/icons/chevron_droit.svg" alt="demarrer"></a>
-    </div>
-  </app-item-menu-card>
-
-  <article class="flex flex-row justify-around pb-4">
-    <a *ngFor="let sousItem of sousMenuList" routerLink="{{sousItem.route}}">
-      <div class="flex flex-col space-y-1  justify-center items-center">
-        <img src="{{sousItem.icon}}" class="w-10" alt="{{ sousItem.title | translate}}">
-        <h3 class="text-gray-600 text-sm font-semibold font-mono"> {{ sousItem.title | translate }} </h3>
+<section class="w-full max-w-md bg-white my-4 rounded-lg shadow-lg cursor-auto pointer-events-auto">
+  @for (menuItem of menuList;track menuItem) {
+    @defer (on viewport) {
+      <app-item-menu-card class="cursor-pointer" (click)="goToAnotherComponent(menuItem)">
+        <img ngSrc="{{menuItem.icon}}" alt="{{ menuItem.title | translate }}" height="32" width="32" header
+             class="text-blue-900">
+        <div main>
+          <h3 class="text-gray-600 text-lg font-semibold font-mono">{{ menuItem.title | translate }}</h3>
+          <p class="text-base font-light tracking-wide"> {{ menuItem.description | translate }}</p>
+        </div>
+        <div footer>
+          <a routerLink="{{menuItem.route}}" routerLinkActive>
+            <img ngSrc="/assets/icons/chevron_droit.svg" alt="demarrer"
+                 height="32" width="32">
+          </a>
+        </div>
+      </app-item-menu-card>
+    } @placeholder {
+      <div class="p-1 max-w-md w-full">
+        <app-skeleton-square width="max-w-md"/>
       </div>
-    </a>
-  </article>
+    }
+  }
+
+
+  <ng-container>
+    <article class="w-full max-w-md flex flex-row justify-around pb-4">
+      @for (sousItem of sousMenuList;track sousItem) {
+        @defer (on viewport) {
+          <a routerLink="{{sousItem.route}}">
+            <div class="flex flex-col space-y-1  justify-center items-center">
+              <img ngSrc="{{sousItem.icon}}" class="w-10" height="32" width="32" alt="{{ sousItem.title | translate}}">
+              <h3 class="text-gray-600 text-sm font-semibold font-mono"> {{ sousItem.title | translate }} </h3>
+            </div>
+          </a>
+        } @placeholder {
+          <div class="p-1 max-w-md w-full">
+            <app-skeleton-square width="max-w-md"/>
+          </div>
+        }
+      }
+    </article>
+  </ng-container>
 
 </section>
 
-<section class="mx-4 my-4 bg-white rounded-lg shadow-lg cursor-auto pointer-events-auto">
-
+<section class=" max-w-md w-full my-4 bg-white rounded-lg shadow-lg cursor-auto pointer-events-auto">
   <a routerLink="/plans" routerLinkActive class="">
     <div class="flex flex-row items-center justify-between space-x-3 px-2 py-4">
-      <img src="/assets/icons/pdf.svg" alt="idee" class="text-blue-900">
+      <img ngSrc="/assets/icons/pdf.svg" alt="idee" class="text-blue-900" height="32" width="32">
       <div>
         <h3 class="text-gray-600 text-lg font-semibold font-mono">{{ 'menuList.download_map' | translate }}</h3>
       </div>
-      <img src="/assets/icons/chevron_droit.svg" alt="demarrer">
+      <img ngSrc="/assets/icons/chevron_droit.svg" alt="demarrer" height="32" width="32">
     </div>
   </a>
-
 </section>
+

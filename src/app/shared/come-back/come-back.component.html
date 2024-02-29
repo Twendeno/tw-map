@@ -1,4 +1,4 @@
-<article class="w-[400px] flex fex-row items-center space-x-3">
-  <a routerLink="/"><span class="pi pi-arrow-left border-r border-gray-300 px-6 py-6"></span></a>
+<article class="w-[448px] flex fex-row items-center space-x-3">
+  <a (click)="onGoBack()" class="cursor-pointer"><span class="pi pi-arrow-left border-r border-gray-300 px-6 py-6"></span></a>
   <header><ng-content select="[header]"/></header>
 </article>

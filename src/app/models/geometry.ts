@@ -1,23 +1,19 @@
-export class Geometry {
-  uuid: string;
-  type: string;
-  name: string;
-  reference: string;
-  createdAt: string;
-  updatedAt: string;
+import {Count} from "@app/models/count";
+import {Station} from "@app/models/station";
 
-  constructor(
-    uuid: string,
-    type: string,
-    name: string,
-    reference: string,
-    createdAt: string,
-    updatedAt: string) {
-    this.uuid = uuid;
-    this.type = type;
-    this.name = name;
-    this.reference = reference;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
+export interface Geometry {
+  uuid: string
+  type: string
+  name: string
+  coordinates: Station[]
+  _count: Count
+  color: string
+  geodata: string
+  reference: string
+  createdAt: string
+  updatedAt: string
+  department_uuid: string
+  town_uuid: string
+  assignedBy: string
+  lastModifiedBy: string
 }

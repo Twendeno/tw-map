@@ -1,27 +1,59 @@
 <section class="mx-4 my-4 bg-white rounded-lg shadow-lg">
-  <app-come-back>
-    <h3 header class="text-gray-600 text-lg font-semibold font-mono"> Itinéraires</h3>
+  <app-come-back (onGoBackCalled)="onGoBack($event)">
+    <h3 header class="text-gray-600 text-lg font-semibold font-mono"> Lines </h3>
   </app-come-back>
 </section>
 
 <section class="mx-4 my-4 bg-white rounded-lg shadow-lg">
-  <div class="flex items-center space-x-1 rounded-t-lg border shadow-sm py-2 px-2">
-    <input id="departure" name="stopLine" [(ngModel)]="research" type="text" required
-           placeholder="Arrêt, ligne"
-           class="w-full  text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6">
-    <span class="pi pi-times cursor-pointer rounded-full p-1 border text-gray-800 border-gray-300"></span>
-  </div>
+  <app-search-form (onFormSubmitted)="onSubmit($event)" placeholder="Arrêt, ligne"/>
 </section>
 
-<section class="mx-4 my-4 bg-white rounded-lg shadow-lg ">
-  <div class="flex flex-col py-4 px-2 space-y-2">
-    <h3 class="text-gray-600 text-lg font-semibold font-mono"> Les lignes </h3>
+@if (!isResearch){
+  <section class="mx-4 my-4 bg-white rounded-lg shadow-lg overflow-y-auto ">
+    <div class="flex flex-col py-4 px-2 space-y-2">
+      <h3 class="text-gray-600 text-lg font-semibold font-mono cursor-pointer"> All lines </h3>
 
-    <div class="flex flex-wrap space-x-2" *ngIf="(transportLines$| async)?.data as geometries">
-        <a class=" cursor-pointer rounded-xl border border-blue-gray-50 bg-white py-4 px-4" *ngFor="let data  of geometries" >
-          <span class="text-gray-600 text-xl font-extrabold font-mono">{{ data.name.toLowerCase().replace("line"," ").trim().toUpperCase().toString()}}</span>
-        </a>
+      @defer (when !isResearch){
+        @if ((transportLines$| async)?.results;as geometries) {
+          <div class="flex flex-wrap space-x-2">
+            @for (geometryItem of geometries ;track geometryItem.uuid) {
+              <app-line-item [data]="geometryItem"/>
+            }
+          </div>
+        }
+      }
+      @placeholder {
+        <app-loading/>
+      }
+
+
     </div>
+  </section>
+}
+@else {
 
-  </div>
-</section>
+  <section class="mx-4 my-4 bg-white rounded-lg shadow-lg overflow-y-auto ">
+    <div class="flex flex-col py-4 px-2 space-y-2">
+      <h3 class="text-gray-600 text-lg font-semibold font-mono cursor-pointer"> Results </h3>
+
+      @defer (when searchResult().length > 0) {
+        <div class="flex flex-wrap space-x-2">
+          @for (geometryItem of searchResult() ;track geometryItem.uuid) {
+            <app-line-item [data]="geometryItem"/>
+          }
+        </div>
+      } @placeholder {
+        <app-loading/>
+      }
+    </div>
+  </section>
+
+}
+
+
+
+
+
+
+
+
