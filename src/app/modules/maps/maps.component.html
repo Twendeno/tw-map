@@ -1,5 +1,6 @@
 <div class="flex justify-center w-full h-screen mx-auto">
   <div
+    #trigger
     id="map"
     leaflet
     [leafletOptions]="mapService.options"
@@ -11,31 +12,46 @@
     [leafletMarkerClusterOptions]="clusterMapService.markerClusterOptions"
     (leafletMarkerClusterReady)="clusterMapService.markerClusterReady($event)"
     (leafletMapReady)="mapService.onMapReady($event)">
-    <div class="controls-left ">
+  </div>
+
+  <div class="controls-left ">
+    @defer (on viewport(trigger)) {
       <router-outlet/>
+    } @placeholder {
+      <app-skeleton-square/>
+    }
+  </div>
+
+  <div class="controls-right space-y-2 items-center">
+    <div
+      id="zoom-in"
+      class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer text-center"
+      (click)="mapService.zoomIn()"
+      [class.disabled]="mapService.zoom >= mapService.zoomMax">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+        <path fill="currentColor"
+              d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14"/>
+        <path fill="currentColor" d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2z"/>
+      </svg>
     </div>
-    <div class="controls-right space-y-2 items-center">
-      <div
-        id="zoom-in"
-        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
-        (click)="mapService.zoomIn()"
-        [class.disabled]="mapService.zoom >= mapService.zoomMax">
-        <span class="pi pi-plus"></span>
-      </div>
-      <div
-        id="zoom-out"
-        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
-        (click)="mapService.zoomOut()"
-        [class.disabled]="mapService.zoom <= mapService.zoomMin">
-        <span class="pi pi-minus"></span>
-      </div>
-      <div
-        id="layers"
-        class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
-        (click)="mapService.nextLayer()">
-        <img alt="layer" src="../../../assets/icons/layers.svg" width="16">
-      </div>
+    <div
+      id="zoom-out"
+      class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
+      (click)="mapService.zoomOut()"
+      [class.disabled]="mapService.zoom <= mapService.zoomMin">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+        <path fill="currentColor"
+              d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5A6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5S14 7.01 14 9.5S11.99 14 9.5 14M7 9h5v1H7z"/>
+      </svg>
+    </div>
+    <div
+      id="layers"
+      class="border rounded border-gray-400 p-1.5 bg-white cursor-pointer"
+      (click)="mapService.nextLayer()">
+      <img alt="layer" ngSrc="assets/icons/layers.svg" width="16" height="16">
     </div>
   </div>
 </div>
+
+
 

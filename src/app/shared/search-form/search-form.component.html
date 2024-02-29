@@ -1,0 +1,12 @@
+<form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="flex items-center px-2 py-3 space-x-1">
+  <div class="flex justify-center items-center w-full">
+    <input id="departure" name="stopLine" type="text" formControlName="search"
+           [placeholder]="placeholder"
+           class="w-full  text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm sm:leading-6">
+    @defer (when search!.value!.length > 0){
+      <i class="pi pi-times-circle cursor-pointer text-gray-800 border-gray-300" (click)="searchForm.patchValue({'search':''})"></i>
+    }
+
+  </div>
+  <button type="submit" [disabled]="!searchForm.valid" class="px-1 py-1.5 bg-blue-400 border rounded-lg text-center"><i class="pi pi-fw pi-search text-white"></i> </button>
+</form>

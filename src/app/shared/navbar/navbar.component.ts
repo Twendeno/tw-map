@@ -2,7 +2,7 @@ import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {TranslationModule} from "@app/modules/translation/translation.module";
-import {LanguageService} from "@app/services/language.service";
+import {LanguageService} from "@app/services/language/language.service";
 import {TreeSelectModule} from "primeng/treeselect";
 import {Subscription} from "rxjs";
 
